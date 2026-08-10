@@ -1,6 +1,5 @@
-Absolutely. For students learning **AI Agents with Databricks**, I would organize the curriculum around **business domains first**, and then teach students how to convert a business problem into an agentic workflow.
-
-Databricks currently supports tool-calling agents, RAG agents, multi-agent systems, MCP integrations, AI Search, MLflow evaluation/observability, Model Serving, Unity AI Gateway, and Databricks Apps—so these domains map well to practical enterprise projects. ([Databricks Documentation][1])
+ 
+Databricks currently supports tool-calling agents, RAG agents, multi-agent systems, MCP integrations, AI Search, MLflow evaluation/observability, Model Serving, Unity AI Gateway, and Databricks Apps—so these domains map well to practical enterprise projects.  
 
 ## 30 Business Domains for AI Agent Projects
 
@@ -37,7 +36,6 @@ Databricks currently supports tool-calling agents, RAG agents, multi-agent syste
 | 29 | 🎓 **Education**                       | Student Advisor Agent, Learning Assistant Agent, Exam Evaluation Agent, Course Recommendation Agent             |
 | 30 | 🌾 **Agriculture**                     | Crop Monitoring Agent, Farm Advisory Agent, Supply Chain Agent, Weather/Risk Agent                              |
 
-Databricks itself highlights financial services, healthcare/life sciences, retail, manufacturing, energy/utilities and other industries as important areas for agentic systems. Its current examples also emphasize always-on, event-driven agents rather than only conversational chatbots. ([Databricks][2])
-
+Databricks itself highlights financial services, healthcare/life sciences, retail, manufacturing, energy/utilities and other industries as important areas for agentic systems. Its current examples also emphasize always-on, event-driven agents rather than only conversational chatbots.  
 ---
  

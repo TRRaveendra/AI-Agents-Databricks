@@ -8,6 +8,8 @@
 
 This repository contains a reusable `skills_mssql_to_sparksql` Agent Skill designed to help an AI coding agent analyze Microsoft SQL Server workloads and generate Databricks-oriented PySpark and Spark SQL implementations.
 
+![MSSQL to PySpark Migration Agent](https://github.com/TRRaveendra/AI-Agents-Databricks/blob/main/images/ai-agent-sqlserver-databricks.png?raw=true)
+
 The skill is organized into a main `SKILL.md` plus focused migration references covering:
 
 - SQL Server component mapping

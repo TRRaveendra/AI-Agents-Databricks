@@ -1,5 +1,7 @@
 # 📚 PDF RAG with Databricks Vector Search
 
+![PDF RAG with Databricks Vector Search](https://github.com/TRRaveendra/AI-Agents-Databricks/blob/main/images/pdf-rag-agent-architecture.png?raw=true)
+
 A complete **Retrieval-Augmented Generation (RAG)** reference implementation for building a PDF question-answering pipeline using **Databricks Vector Search, Delta Lake, Unity Catalog, managed embeddings, and an LLM**.
 
 The notebook demonstrates the complete flow:

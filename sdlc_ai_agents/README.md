@@ -18,6 +18,47 @@
 The framework provides specialized AI agents for requirements analysis, business understanding, metadata discovery, data modeling, PySpark and SQL development, data quality, code review, testing, documentation, deployment, and production monitoring.
 
 The project is designed primarily for **Databricks and modern data engineering environments**, while keeping the agent architecture extensible for additional platforms and integrations.
+# Databricks Multi-Agent SDLC Platform Orchestrator
+## From Jira Requirement to Production-Ready Solution
+
+**Overview**: This orchestrator manages the complete 15-agent pipeline for automated SDLC implementation using Databricks Assistant API (Genie Code) and specialized skills.
+
+## Platform Architecture
+
+```
+╭───────────────────────────────────────────────────╮
+│   DATABRICKS MULTI-AGENT SDLC PLATFORM   │
+│   Jira to Production - Fully Automated    │
+╰───────────────────────────────────────────────────╯
+```
+
+### 15-Agent Pipeline
+
+① **Jira Requirement Agent** → Extract & parse Jira tickets  
+② **Requirement Validation Agent** → Validate completeness & identify gaps  
+③ **Business Understanding Agent** → Articulate business objectives  
+④ **Metadata Discovery Agent** → Discover Unity Catalog metadata  
+⑤ **Mapping Document Agent** → Create source-to-target mappings  
+⑥ **Data Model Agent** → Design data models & DDL  
+⑦ **PySpark Development Agent** → Generate production PySpark code  
+⑧ **SQL Agent** → Generate SQL transformations  
+⑨ **Data Quality Agent** → Implement DQ checks  
+⑩ **Code Review Agent** → Review & optimize code  
+⑪ **Unit Test Agent** → Generate unit tests  
+⑫ **Testing Agent** → Run integration tests  
+⑬ **Documentation Agent** → Generate documentation  
+⑭ **Deployment Agent** → Deploy to production  
+⑮ **Production Monitoring Agent** → Monitor & alert  
+
+### Key Features
+
+✅ **Fully Automated** - End-to-end pipeline from Jira to production  
+✅ **Genie Code Integration** - Leverages Databricks Assistant API  
+✅ **Skill-Based** - Uses 15 specialized SDLC agent skills  
+✅ **Unity Catalog Native** - State management in Delta tables  
+✅ **Approval Gates** - Human-in-the-loop at critical stages  
+✅ **Vector Search** - Knowledge retrieval for context  
+✅ **Production-Ready** - Runs as Databricks Jobs  
 
 ### SDLC Agent Flow
 

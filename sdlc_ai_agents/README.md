@@ -13,6 +13,8 @@
 
 ## Overview
 
+![Alt Text](https://github.com/TRRaveendra/AI-Agents-Databricks/blob/main/images/sdlc_archietcture_agents.jpeg?raw=true)
+
 **SDLC AI Agents** is an open-source Agentic AI framework designed to automate and enhance different stages of the Software Development Life Cycle.
 
 The framework provides specialized AI agents for requirements analysis, business understanding, metadata discovery, data modeling, PySpark and SQL development, data quality, code review, testing, documentation, deployment, and production monitoring.

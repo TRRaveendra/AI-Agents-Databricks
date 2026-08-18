@@ -11,7 +11,7 @@
 # MAGIC - Functionality: Individual agents and full pipeline execution
 # MAGIC - State Management: Pipeline runs, agent runs, and artifacts
 # MAGIC
-# MAGIC **Base Path**: `/Workspace/Users/motivation4shots@gmail.com/sdlc_ai_agents`  
+# MAGIC **Base Path**: `/Workspace/Users/{user_email}/sdlc_ai_agents`  
 # MAGIC **Test Ticket**: `KAN-6`  
 # MAGIC **State Location**: `main.state`
 
@@ -1317,7 +1317,7 @@ try:
     # For now, we'll simulate by checking if we can access the orchestrator
     print(f"\n⚠️  MANUAL STEP REQUIRED:")
     print(f"   To complete E2E test, manually run:")
-    print(f"   %run /Workspace/Users/motivation4shots@gmail.com/sdlc_ai_agents/16_Orchestrator")
+    print(f"   %run /Workspace/Users/{user_email}/sdlc_ai_agents/16_Orchestrator")
     print(f"   With parameters: ticket_id='{test_ticket}'\n")
     
     e2e_results.append(("ℹ", "E2E test requires manual orchestrator execution"))

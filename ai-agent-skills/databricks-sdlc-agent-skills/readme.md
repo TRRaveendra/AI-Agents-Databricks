@@ -6,6 +6,8 @@ standalone Claude skill (`SKILL.md` + `references/`) that tells Claude how to
 act as that specific agent: what it reads, what it must produce, and how it
 calls the Databricks backend to do the actual work.
 
+![Alt text](https://github.com/TRRaveendra/AI-Agents-Databricks/blob/main/images/sdlc_ai_agents_skills.png?raw=true)
+
 ```
 agent-skills/
 ├── 01-jira-requirement-agent/

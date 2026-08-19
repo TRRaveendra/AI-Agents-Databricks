@@ -154,7 +154,7 @@ The platform requires the following Unity Catalog objects:
 Run the prerequisite notebook to set up Jira credentials:
 
 ```
-/Workspace/Users/motivation4shots@gmail.com/sdlc_ai_agents/jira-setup-secrets
+/Workspace/Users/{user_name}/sdlc_ai_agents/jira-setup-secrets
 ```
 
 This creates:
@@ -434,7 +434,7 @@ JIRA_BASE_URL = "https://your-domain.atlassian.net"  # Jira URL
 
 Run the comprehensive validation suite:
 ```
-/Workspace/Users/motivation4shots@gmail.com/sdlc_ai_agents/17_Comprehensive_Validation_Tests
+/Workspace/Users/{user_name}/sdlc_ai_agents/17_Comprehensive_Validation_Tests
 ```
 
 ---

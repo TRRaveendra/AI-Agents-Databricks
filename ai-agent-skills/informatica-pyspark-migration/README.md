@@ -1,170 +1,99 @@
-# Informatica → Databricks PySpark Migration Skills
+# informatica-to-pyspark-migration
 
-A knowledge base of **enterprise-grade migration patterns** for converting **Informatica PowerCenter** and **IDMC / IICS** mappings, sessions, and workflows into production-ready **PySpark**, **Spark SQL**, **Delta Lake**, and **Databricks Jobs / Lakeflow** artifacts.
+A Claude Skill that converts Informatica PowerCenter and IDMC/CDI assets into
+production-grade PySpark on Databricks — Delta Lake, Unity Catalog, Lakeflow
+Jobs and Declarative Pipelines.
 
-Modeled after the [ADF → Lakeflow skills](https://github.com/TRRaveendra/AI-Agents-Databricks/tree/main/ai-agent-skills/adf-to-lakeflow-skills) pattern and aligned with the MSSQL → PySpark migration skill.
+Built to the same shape as the ADF and MSSQL migration skills: one `SKILL.md`
+holding the workflow, output contract and risk register, with progressive
+reference files loaded only when a given mapping needs them.
 
-## Recommended usage flow for agents
-
-1. Load `SKILL.md`
-2. Inventory transformations (from XML or user description)
-3. Consult the relevant reference files
-4. Emit the `run_` function + optional Job/Lakeflow definition
-5. Apply the validation checklist
-
-## Relationship to other skills
-
-- Complements `mssql-to-pyspark-migration` for T-SQL / stored-procedure logic that often co-exists with Informatica.
-- Complements Databricks agent / Lakeflow skills for final orchestration and pipeline deployment.
----
-
-## Why this exists
-
-Informatica and Databricks do not map one-to-one. An Expression Transformation is not a simple `withColumn`, a Lookup is not automatically a join, a Sequence Generator has different semantics, and an Update Strategy + multi-target mapping has no direct equivalent without Delta `MERGE`. Every migration team rediscovers these gaps the hard way.
-
-This library encodes the mappings once — including the parts that *don’t* translate cleanly — so engineers, architects, and AI coding agents all work from the same conversion rules.
-
----
-
-## What’s inside
+## Layout
 
 ```
-informatica-to-pyspark-migration/
-│
-├── README.md                         ← you are here
-├── SKILL.md                          ⭐ main skill (load this for AI agents)
-│
+informatica-pyspark-migration/
+├── SKILL.md                          # workflow, component map, output contract, risks
+├── README.md
 └── references/
-    ├── transformation-patterns.md    ← detailed before/after for each transformation
-    ├── expression-function-map.md    ← Informatica expression language → Spark
-    ├── orchestration.md              ← Session / Workflow → Jobs & Lakeflow
-    ├── validation-checklist.md       ← testing & cutover checklist
-    └── xml-parsing-notes.md          ← PowerCenter / IDMC export guidance
+    ├── transformation-patterns.md    # before/after for every transformation type
+    ├── expression-function-map.md    # expression language → Spark, with the gotchas
+    ├── orchestration.md              # Session/Workflow/Worklet → Lakeflow
+    ├── validation-checklist.md       # four-gate reconciliation and cutover
+    └── xml-parsing-notes.md          # PowerCenter XML + IDMC export parsing
 ```
 
-### Component mapping
+## Installation
 
-| Informatica Component              | Databricks Equivalent                          | Complexity   | Reference |
-|------------------------------------|------------------------------------------------|--------------|-----------|
-| Source Qualifier / Source          | `spark.read` / Auto Loader / JDBC / UC table   | ⭐⭐ Medium   | transformation-patterns |
-| Target                             | Delta table + `MERGE` / `saveAsTable`          | ⭐⭐ Medium   | transformation-patterns |
-| Expression                         | `withColumn` + Spark SQL / function map        | ⭐⭐ Medium   | expression-function-map |
-| Filter                             | `.filter()` / `WHERE`                          | ⭐ Low       | transformation-patterns |
-| Joiner                             | DataFrame `join` (+ broadcast)                 | ⭐⭐ Medium   | transformation-patterns |
-| Lookup (connected)                 | Broadcast / left join + coalesce               | ⭐⭐⭐ High    | transformation-patterns |
-| Lookup (unconnected)               | Join rewrite or controlled UDF                 | ⭐⭐⭐⭐ Very High | transformation-patterns |
-| Router                             | Multiple filtered DataFrames                   | ⭐⭐ Medium   | transformation-patterns |
-| Aggregator                         | `groupBy().agg()`                              | ⭐⭐ Medium   | transformation-patterns |
-| Sorter / Rank                      | `orderBy` / Window functions                   | ⭐⭐ Medium   | transformation-patterns |
-| Sequence Generator                 | IDENTITY / `monotonically_increasing_id` / window | ⭐⭐⭐ High | transformation-patterns |
-| Update Strategy                    | Delta `MERGE INTO`                             | ⭐⭐⭐ High    | transformation-patterns |
-| Mapplet                            | Reusable Python function                       | ⭐⭐ Medium   | transformation-patterns |
-| Session                            | Databricks Job task                            | ⭐⭐ Medium   | orchestration |
-| Workflow / Worklet                 | Multi-task Job or Lakeflow pipeline            | ⭐⭐⭐ High    | orchestration |
-| Parameters / Variables             | Job parameters + `params` dict                 | ⭐ Low       | SKILL.md + orchestration |
+**Claude.ai / Claude Desktop** — upload the packaged `.skill` file and click
+**Save skill**.
 
----
+**Claude Code / filesystem** — copy the folder into your skills directory:
 
-## Quick start
+```bash
+cp -r informatica-to-pyspark-migration ~/.claude/skills/
+```
 
-**1. Load the skill**  
-For AI agents (Claude, Cursor, Grok, etc.) point the agent at `SKILL.md`. The description and front-matter make it discoverable.
+**Databricks / repo use** — commit the folder alongside your migration code so
+the reference files travel with the converted mappings. Reviewers use
+`transformation-patterns.md` as the spec they diff generated code against.
 
-**2. Inventory your Informatica assets**  
-Export PowerCenter mappings/sessions/workflows as XML (or IDMC taskflows). List every transformation type in scope, then open the matching reference file.
+## What it does
 
-**3. Follow the conversion contract**  
-Every mapping becomes a pure, testable function:
+| Informatica | Databricks |
+|---|---|
+| Source Qualifier / Sources | `spark.read`, Auto Loader, JDBC, Lakehouse Federation |
+| Target | Delta + Unity Catalog + `MERGE` |
+| Expression | `withColumns` / Spark SQL, with a full function map |
+| Filter / Router | `.filter()` / named branch DataFrames |
+| Joiner | DataFrame join + broadcast |
+| Lookup (connected & unconnected) | join rewrite, with multiple-match policy preserved |
+| Aggregator / Rank / Sorter | `groupBy`, window functions, `orderBy` |
+| Sequence Generator | Delta IDENTITY / window offset / `monotonically_increasing_id` |
+| Update Strategy | Delta `MERGE` |
+| Mapplet | reusable Python function |
+| Session | Lakeflow Job task (cluster, retries, pre/post SQL) |
+| Workflow / Worklet | multi-task Job or Declarative Pipeline |
+| Parameters / variables | job parameters + `params` / `table_map` dicts |
+
+## Output contract
+
+Every converted mapping becomes one pure function:
 
 ```python
 def run_<mapping_name>(spark, params: dict, table_map: dict, dry_run: bool = True):
-    """Return dict of named result DataFrames and/or write plan."""
 ```
 
-- Physical table/path names come **only** from `table_map`
-- All writes are guarded by `if not dry_run:`
-- Prefer Spark SQL for set-based logic; DataFrame API for composition
-- High-risk constructs are flagged with Semantic Notes
+Physical names come only from `table_map`; business values only from `params`;
+every write is guarded by `dry_run`. That guard is what makes the differential
+validation in `validation-checklist.md` possible before cutover.
 
-**4. Migrate in dependency order**
+## Design principles
 
-| Phase | Focus                        | Components                                      |
-|-------|------------------------------|-------------------------------------------------|
-| 1 — Foundation | Connectivity & storage | Sources/Targets → Unity Catalog + external locations · Parameters → job params / secrets |
-| 2 — Core Logic | Transformations       | Expression, Filter, Joiner, Lookup, Aggregator, Router → PySpark/SQL |
-| 3 — Control Flow | Orchestration        | Session properties → Job clusters & retries · Workflow dependencies → multi-task Jobs |
-| 4 — Advanced & Cutover | SCD, CDC, validation | Update Strategy → MERGE · file sources → Auto Loader · differential testing |
+- **Semantic fidelity over clean-looking code.** PowerCenter's quiet behaviours
+  (DECODE matching NULL to NULL, `||` treating NULL as empty string, Aggregator
+  returning the last row's value for ungrouped ports, master/detail outer joins
+  being the reverse of what people assume) are documented and preserved.
+- **High-risk constructs are flagged, never silently approximated.** Unconnected
+  lookups, Sequence Generators, multi-target Update Strategies, persistent
+  mapping variables, dynamic lookup caches, and Stored Procedure/Java/SQL
+  transformations all emit an explicit `# RISK:` comment and a call-out.
+- **The dataflow is the spec, not the canvas.** Chains of Expression/Filter/Sorter
+  collapse into readable Spark rather than a one-to-one transliteration.
+- **Validation is part of the deliverable.** Conversion without a reconciliation
+  plan is a liability, so the skill produces the harness alongside the code.
 
----
+## Typical prompts that trigger it
 
-## Core principles (from SKILL.md)
+- "Convert this PowerCenter mapping XML to PySpark."
+- "We're moving off Informatica to Databricks — where do I start with this workflow?"
+- "What does this Update Strategy plus Sequence Generator become in Delta?"
+- "Build an inventory and complexity assessment from this folder export."
+- "Write the reconciliation harness so I can prove the new job matches."
 
-1. Prefer **Spark SQL** for declarative set-based logic; use **DataFrame API** when it improves clarity or dynamic construction.
-2. Always produce a pure function with the signature shown above.
-3. Never hard-code catalog/schema/table or file paths — use `table_map`.
-4. Guard every write with `dry_run`.
-5. Treat source Informatica XML / metadata as untrusted.
-6. Flag high-risk constructs (unconnected lookups, Sequence Generator, multi-target Update Strategy, stored-procedure transforms, custom Java/Python) and propose redesigns.
-7. Prefer Delta Lake + Unity Catalog targets. Use Auto Loader for file-based sources.
-8. Preserve business logic exactly; optimize only after functional equivalence is proven.
+## Scope and limits
 
----
-
-## Validation levels
-
-| Level                    | What it means                                                                 |
-|--------------------------|-------------------------------------------------------------------------------|
-| **Static validated**     | XML/metadata parse + construct inventory + schema-compliant generation + policy checks |
-| **Synthetic tests passed** | Restricted notebook runs successfully with `dry_run=True`                   |
-| **Differentially verified** | Side-by-side Informatica vs Databricks results match (counts, keys, nulls, aggregates) |
-
-See `references/validation-checklist.md` for the full cutover checklist.
-
----
-
-## Using this with an AI agent
-
-Each file is written to be consumed programmatically. Intended loop:
-
-```python
-def generate_migration_plan(informatica_xml_or_description):
-    """
-    Parse Informatica mapping/workflow and generate Databricks equivalent.
-    """
-    components = extract_components(informatica_xml_or_description)
-
-    for component in components:
-        skill = load_skill(component.type)          # SKILL.md + references/
-        pyspark_code = skill.transform(component)   # run_ function
-        job_yaml = skill.orchestrate(component)     # optional Job / Lakeflow
-        validate(pyspark_code)
-
-    return pyspark_module, job_definition
-```
-
----
-
-## Relationship to other skills
-
-- **mssql-to-pyspark-migration** — for T-SQL / stored-procedure logic that often co-exists with Informatica mappings.
-- **Databricks agent / Lakeflow skills** — for final job deployment, Unity Catalog setup, and declarative pipelines.
-- **ADF → Lakeflow skills** — sibling knowledge base for Azure Data Factory migrations; same structural philosophy.
-
----
-
-## Success criteria
-
-- [ ] All in-scope mappings converted to pure `run_` functions
-- [ ] Sessions and workflows mapped to Databricks Jobs or Lakeflow pipelines
-- [ ] Sources and targets registered in Unity Catalog
-- [ ] High-risk constructs documented with Semantic Notes
-- [ ] Static + synthetic validation passed
-- [ ] Differential validation completed for critical mappings
-- [ ] Parallel-run period signed off
-- [ ] Documentation and runbooks updated
-
----
-
-## License & contribution
-
-Intended for internal use and AI-agent consumption. Adapt freely for your migration program. Contributions that improve transformation coverage, expression maps, or validation patterns are welcome.
+The skill converts logic; it does not convert what it cannot see. Stored
+Procedure, Java, Custom and External Procedure transformations need their source
+obtained separately. Data volumes, skew, and whether a mapping is still in use
+are not in the export — the skill asks rather than assumes. Cluster sizing starts
+from data volume, not from transcribed DTM buffer settings.

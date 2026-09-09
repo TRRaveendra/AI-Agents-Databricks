@@ -4,6 +4,18 @@ A knowledge base of **enterprise-grade migration patterns** for converting **Inf
 
 Modeled after the [ADF → Lakeflow skills](https://github.com/TRRaveendra/AI-Agents-Databricks/tree/main/ai-agent-skills/adf-to-lakeflow-skills) pattern and aligned with the MSSQL → PySpark migration skill.
 
+## Recommended usage flow for agents
+
+1. Load `SKILL.md`
+2. Inventory transformations (from XML or user description)
+3. Consult the relevant reference files
+4. Emit the `run_` function + optional Job/Lakeflow definition
+5. Apply the validation checklist
+
+## Relationship to other skills
+
+- Complements `mssql-to-pyspark-migration` for T-SQL / stored-procedure logic that often co-exists with Informatica.
+- Complements Databricks agent / Lakeflow skills for final orchestration and pipeline deployment.
 ---
 
 ## Why this exists
